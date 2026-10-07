@@ -1,0 +1,455 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Clarisse Wibault">
+    <title>Clarisse Wibault</title>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            chtml: {
+                scale: 1
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --link-blue: #4f7ee8;
+            --text: #111111;
+            --muted: #555555;
+            --light: #777777;
+            --box-blue-bg: #f4f7fe;
+            --box-blue-frame: #4f7ee8;
+            --box-sky-bg: #f0f5ff;
+            --box-sky-frame: #6496ff;
+            --highlight-blue: #2b579a;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            color: var(--text);
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--link-blue);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        .page {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .main_title {
+            font-size: 38px;
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin: 0 0 12px;
+        }
+
+        .main_subtitle {
+            color: var(--muted);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .intro-container {
+            text-align: justify;
+            margin-bottom: 24px;
+        }
+
+        .intro {
+            font-size: 15px;
+            line-height: 1.6;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .intro p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .diagram-container {
+            text-align: center;
+            margin: 28px auto;
+            max-width: 680px;
+        }
+
+        .diagram {
+            max-width: 75%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .diagram-caption {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 10px;
+            font-style: italic;
+            line-height: 1.4;
+            padding: 0 20px;
+        }
+
+        .pub-links {
+            font-size: 15px;
+            margin-top: 16px;
+        }
+
+        .pub-links span {
+            color: var(--light);
+            padding: 0 6px;
+        }
+
+        .section {
+            margin-top: 50px;
+        }
+
+        .section h2 {
+            font-size: 26px;
+            font-weight: 300;
+            letter-spacing: -0.3px;
+            margin: 0 auto 18px;
+            max-width: 680px;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 6px;
+        }
+
+        .item-block {
+            margin-bottom: 24px;
+            text-align: justify;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .item-block p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .item-block ul,
+        .item-block ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .math-box {
+            background: var(--box-sky-bg);
+            border: 1px solid var(--box-sky-frame);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 20px auto;
+            max-width: 680px;
+        }
+
+        .math-box-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2b579a;
+        }
+
+        .taxonomy-box {
+            background: var(--box-blue-bg);
+            border: 1px solid var(--box-blue-frame);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 20px auto;
+            max-width: 680px;
+        }
+
+        .taxonomy-box-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        /* Publication Table Styles */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin: 25px 0;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+            color: var(--text);
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 6px 8px;
+        }
+
+        .results-table th {
+            font-weight: 700;
+        }
+
+        /* Booktabs Style Borders */
+        .results-table thead tr:first-child th {
+            border-top: 2px solid #111;
+        }
+
+        .results-table thead tr:last-child th {
+            border-bottom: 1px solid #111;
+        }
+
+        .results-table tbody tr.section-divider td {
+            border-top: 1px solid #eee;
+        }
+
+        .results-table tbody tr:last-child td {
+            border-bottom: 2px solid #111;
+        }
+
+        .table-caption {
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .best-mean {
+            color: var(--highlight-blue);
+            font-weight: 700;
+        }
+
+        .overlap-ci {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--light);
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+
+        <section class="hero">
+            <h1 class="main_title">Q-Shaped Options for Hierarchical Reinforcement Learning</h1>
+            <div class="main_subtitle">
+                <a href="https://clarisse-wibault.github.io/clarissewibault/" target="_blank"
+                    rel="noopener noreferrer">Clarisse Wibault</a>
+            </div>
+            <div class="main_subtitle">October 2026</div>
+
+            <div class="pub-links">
+                <a href="https://arxiv.org" target="_blank" rel="noopener noreferrer">Paper</a>
+                <span>|</span>
+                <a href="https://github.com/CWibault/QSO" target="_blank" rel="noopener noreferrer">Code</a>
+            </div>
+            <br>
+
+            <div class="intro-container">
+                <div class="intro">
+                    <p>
+                        In this post, I will introduce <strong>three desiderata for action abstractions</strong> 
+                        in Hierarchical Reinforcement Learning (HRL), as well as 
+                        <strong>Q-Shaped Options (QSO)</strong>, an algorithm designed to address all three.
+                    </p>
+                    <div class="diagram-container">
+                        <img src="main.png" alt="Relativised Options" class="diagram">
+                        <div class="diagram-caption">
+                            Figure 1: enabling the use of different state-representations at different levels of the
+                            hierarchy, requires <strong>relativised options</strong> that abstract away from the
+                            absolute frame of
+                            reference.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Hierarchical Reinforcement Learning</h2>
+            <div class="item-block">
+                <p>
+                    Learning to tackle long-horizon, goal-conditioned tasks requires an agent to reason 
+                    over extended timescales and act across a broad range of states. 
+                </p>
+                <p>
+                    In goal-conditioned two-tiered Hierarchical Reinforcement Learning (HRL) a high-level 
+                    policy outputs a high-level action or option conditioned on the current state and goal; 
+                    a low-level policy then conditions on this option as well as the current state to output 
+                    a primitive action. In maze navigation, for example, the option might be to reach 
+                    ``a point two metres down'', while the primitive action could be applying torques to an individual joint.
+                </p>
+                <p>
+                    In principle, HRL addresses both challenges of long-horizon, goal-conditioned tasks 
+                    through the interaction between action (temporal) and state (spatial) abstraction. 
+                </p>
+                <p>
+                    Firstly, by using an action abstraction to represent temporally extended behaviour 
+                    as options, a hierarchical policy reduces the effective decision horizon. 
+                    The high-level policy reasons over options instead of primitive actions, while the 
+                    low-level policy reasons to pursue the option rather than the distant goal. 
+                </p>
+                <p>
+                    Secondly, by enabling different state abstractions at each level of the hierarchy, 
+                    a hierarchical policy can achieve coarser state abstraction than a non-hierarchical 
+                    policy if each level discards different information irrelevant to its part of the 
+                    decision process. Intuitively, this permits greater data aggregation for learning. 
+                    For example, the high-level can aggregate all examples at a certain coordinate 
+                    irrespective of pose, which is too fine-grained for high-level control, while the 
+                    low-level can aggregate all examples with a certain pose irrespective of 
+                    coordinates, since reaching ``a point two metres down'' requires the same actions 
+                    wherever the agent is.
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>The Problem</h2>
+            <div class="item-block">
+                <p>
+                    The problem is that realising these two benefits of a hierarchical policy depends 
+                    on learning an appropriate action abstraction. 
+                </p>
+                <p>
+                    To improve stability and avoid collapsing to degenerate solutions (where options terminate at every step, or 
+                    run to the end of the episode), decoupled approaches train each policy separately 
+                    using fixed-length trajectory segments. The action abstraction maps these segments 
+                    to the option space, serving as actions for the high-level policy and goals for the 
+                    low-level policy during training. 
+                </p>
+                <p>
+                    The issue is that current HRL algorithms learn abstractions that fail in one of two ways.
+                </p>
+                <p>
+                    Some discard distinctions between options that are needed for optimal control.
+                    This limits the quality of the recoverable policy and undermines hierarchy altogether. 
+                </p>
+                <p>
+                    Others retain distinctions between options that are irrelevant for control. 
+                    This preserves horizon reduction but forfeits coarser state abstraction, 
+                    as functionally equivalent behaviours remain distinct outputs of the 
+                    high-level policy and distinct inputs to the low-level one.
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Action Abstraction Desiderata</h2>
+            <div class="item-block">
+                <p>
+                    We introduce three desiderata for an action abstraction to enable horizon reduction and data aggregation.
+                </p>
+                <div class="math-box">
+                    <strong>Desideratum 1. Represent outcome rather than execution.</strong>
+                </div>
+                <p>
+                    To prevent potentially suboptimal dataset execution from becoming a part of the option's representation, 
+                    we want the option to represent the outcome of a trajectory segment rather than the exact state-action 
+                    sequence that produced it. 
+                </p>
+                <div class="math-box">
+                    <strong>Desideratum 2. Preserve distinctions between options necessary for optimal control.</strong>
+                </div>
+                <p>
+                    We want two target states that require different actions from the same current state map to different options, 
+                    so that a policy conditioning on the representation instead of the target state can still be optimal for both.
+                </p>
+                <div class="math-box">
+                    <strong>Desideratum 3. Discard unnecessary distinctions between options.</strong>
+                </div>
+                <p>
+                    We want trajectory segments with similar outcomes to map to the same option, so that experience 
+                    can be aggregated across the state space. 
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Q-Shaped Options</h2>
+            <div class="item-block">
+                <p>
+                    QSO builds on an architecture with separate state-value functions, Q functions and policies 
+                    at each level of the hierarchy. It learns the action abstraction between consecutive levels 
+                    as an encoder shared between the two levels and shaped by their respective Q functions. 
+                </p>
+                <p>
+                    To address our first desideratum, we encode only the current and target states to represent 
+                    the outcome of a trajectory segment rather than the exact state-action sequence that produced it. 
+                </p>
+                <p>
+                    To address our second desideratum, we shape the abstraction via the low-level Q function. Intuitively, 
+                    if two admissible target states require different actions from the same current state, 
+                    the low-level Q function must represent different sets of action values. Minimising the Bellman error 
+                    therefore pressures the action abstraction to map the current and target state pairs to different points 
+                    in the option space. In our paper, we introduce a formal definition of a control-sufficient action abstraction
+                    and prove that low-level Q shaping satisfies control-sufficiency (note that this is actually stronger than control sufficiency). 
+                </p>
+                <p>
+                    To address our third desideratum, we additionally shape the option space through the high-level Q function.
+                    Functionally equivalent state-target pairs induce similar high-level action values, 
+                    so distinguishing between them provides little predictive benefit to $Q_h$. Note that, 
+                    unlike control sufficiency, this invariance is not explicitly enforced by the objective, 
+                    instead simply providing an inductive bias towards it under shared function approximation 
+                    and gradient-based optimisation. 
+                    Empirically, we find that this is sufficient to form coherent clusters in the option space. 
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Acknowledgements</h2>
+            <div class="item-block">
+                <p>
+                </p>
+            </div>
+            <footer>
+                <a href="https://github.com/jonbarron/jonbarron.github.io" target="_blank"
+                    rel="noopener noreferrer">Page
+                    Template</a>
+            </footer>
+        </section>
+    </main>
+</body>
+
+</html>
