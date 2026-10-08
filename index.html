@@ -327,7 +327,7 @@
                     to an individual joint.
                 </p>
                 <div class="diagram-container">
-                    <img src="hrl.png" alt="HRL" class="diagram" style="width: 50%; display: block; margin: 0 auto;">>
+                    <img src="hrl.png" alt="HRL" class="diagram" style="width: 50%; display: block; margin: 0 auto;">
                     <div class="diagram-caption">
                         Figure 1: Goal-conditioned two-tiered Hierarchical Reinforcement Learning. 
                     </div>
@@ -371,7 +371,7 @@
                     high-level policy and goals for the low-level policy during training. 
                 </p>
                 <div class="diagram-container">
-                    <img src="decoupled_training.png" alt="Decoupled Training" class="diagram" style="width: 50%; display: block; margin: 0 auto;">>
+                    <img src="decoupled_training.png" alt="Decoupled Training" class="diagram" style="width: 50%; display: block; margin: 0 auto;">
                     <div class="diagram-caption">
                         Figure 2: Action abstraction used for decoupled training. 
                     </div>
@@ -631,7 +631,7 @@
                                 <td>100%</td>
                             </tr>
                             <tr class="section-divider avg">
-                                <td>Average over 11 Environments</td>
+                                <td>Average</td>
                                 <td>29 <small>[27, 30]</small></td>
                                 <td>32 <small>[29, 34]</small></td>
                                 <td>20 <small>[20, 20]</small></td>
@@ -647,15 +647,15 @@
                 </div>
                 <p>
                     Table 1 shows that QSO achieves the highest average success rate across the 11 
-                    environments, 54\% against 49\% for the next best method (DSHARSA). Particularly 
+                    environments, 54% against 49% for the next best method (DSHARSA). Particularly 
                     notable is its performance in humanoidmaze, which has the largest action space 
                     dimension (21, against at most 8 in the other environments) where it achieves 
-                    90\% against 82\% for the next best method and three times that of DSHARSA. 
-                    In puzzle-4x4 it achieves 92\% against at most 74\% for any baseline. 
+                    90% against 82% for the next best method and three times that of DSHARSA. 
+                    In puzzle-4x4 it achieves 92% against at most 74% for any baseline. 
                     In cube-quadruple, the hardest manipulation environment, QSO is the only method 
                     with non-zero success on two of the five tasks. 
-                    QSO performs consistently across environments, achieving at least 65\% of the best 
-                    success rate in all environments, while every other algorithm drops below 35\% of 
+                    QSO performs consistently across environments, achieving at least 65% of the best 
+                    success rate in all environments, while every other algorithm drops below 35% of 
                     the best in at least one.
                 </p>
                 <p>
@@ -704,6 +704,23 @@
                         Figure 7: Cube-double Q shaping ablation option embedding PCAs and whitened similarity matrices. 
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>What's Next?</h2>
+            <div class="item-block">
+                <p>
+                    Firstly, extending to the online setting, i.e. using the hierarchical policy to do more targeted exploration for ''maximally useful'' data collection. 
+                </p>
+                <p>
+                    Secondly, addressing stochastic environments, i.e. using progress-adaptive high-level control to reduce the optimistic bias that 
+                    arises when the high-level critic evaluates an option conditioned on its realised outcome, 
+                    a limitation shared by all hindsight-based hierarchical methods, including HIQL, OPAL, SHARSA and DSHARSA.
+                </p>
+                <p>
+                    Finally, adapting QSO to language, i.e. using goal-conditioned Q-shaping to learn latent abstractions from text.
+                </p>
             </div>
         </section>
     </main>
