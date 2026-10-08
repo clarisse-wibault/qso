@@ -265,6 +265,18 @@
             font-size: 13px;
             color: var(--light);
         }
+        .results-table.qso-table, .results-table.qso-table th, .results-table.qso-table td {
+            font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Courier New", monospace;
+        }
+        .results-table.qso-table td:nth-child(n+4):nth-child(-n+8),
+        .results-table.qso-table thead tr:nth-child(2) th:nth-child(n+4):nth-child(-n+8) { background: #F2F2F2; }
+        .results-table.qso-table td:nth-child(9),
+        .results-table.qso-table thead tr:nth-child(2) th:nth-child(9) { background: #EDF2FE; }
+        .results-table.qso-table tr.avg td:nth-child(n+4):nth-child(-n+8) { background: #E6E6E6; }
+        .results-table.qso-table tr.avg td:nth-child(9) { background: #DCE6FC; }
+        .results-table.qso-table td:nth-child(10), .results-table.qso-table th.ratio { border-left: 1px solid #000; }
+        .results-table.qso-table .best, .results-table.qso-table .qso-head { color: #6495ED; font-weight: bold; }
+        .results-table.qso-table .group { text-align: center; border-bottom: 1px solid #000; }
     </style>
 </head>
 
@@ -293,15 +305,6 @@
                         in Hierarchical Reinforcement Learning (HRL), as well as 
                         <strong>Q-Shaped Options (QSO)</strong>, an algorithm designed to address all three.
                     </p>
-                    <div class="diagram-container">
-                        <img src="main.png" alt="Relativised Options" class="diagram">
-                        <div class="diagram-caption">
-                            Figure 1: enabling the use of different state-representations at different levels of the
-                            hierarchy, requires <strong>relativised options</strong> that abstract away from the
-                            absolute frame of
-                            reference.
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -318,8 +321,15 @@
                     policy outputs a high-level action or option conditioned on the current state and goal; 
                     a low-level policy then conditions on this option as well as the current state to output 
                     a primitive action. In maze navigation, for example, the option might be to reach 
-                    ``a point two metres down'', while the primitive action could be applying torques to an individual joint.
+                    ''a point two metres down'', while the primitive action could be applying torques 
+                    to an individual joint.
                 </p>
+                <div class="diagram-container">
+                    <img src="hrl.png" alt="HRL" class="diagram">
+                    <div class="diagram-caption">
+                        Figure 1: Goal-Conditioned two-tiered Hierarchical Reinforcement Learning. 
+                    </div>
+                </div>
                 <p>
                     In principle, HRL addresses both challenges of long-horizon, goal-conditioned tasks 
                     through the interaction between action (temporal) and state (spatial) abstraction. 
@@ -338,7 +348,7 @@
                     For example, the high-level can aggregate all examples at a certain coordinate 
                     irrespective of pose, which is too fine-grained for high-level control, while the 
                     low-level can aggregate all examples with a certain pose irrespective of 
-                    coordinates, since reaching ``a point two metres down'' requires the same actions 
+                    coordinates, since reaching ''a point two metres down'' requires the same actions 
                     wherever the agent is.
                 </p>
             </div>
@@ -352,81 +362,91 @@
                     on learning an appropriate action abstraction. 
                 </p>
                 <p>
-                    To improve stability and avoid collapsing to degenerate solutions (where options terminate at every step, or 
-                    run to the end of the episode), decoupled approaches train each policy separately 
-                    using fixed-length trajectory segments. The action abstraction maps these segments 
-                    to the option space, serving as actions for the high-level policy and goals for the 
-                    low-level policy during training. 
+                    To improve stability and avoid collapsing to degenerate solutions (where options 
+                    terminate at every step, or run to the end of the episode), decoupled approaches 
+                    train each policy separately using fixed-length trajectory segments. The action 
+                    abstraction maps these segments to the option space, serving as actions for the 
+                    high-level policy and goals for the low-level policy during training. 
                 </p>
+                <div class="diagram-container">
+                    <img src="decoupled_training.png" alt="Decoupled Training" class="diagram">
+                    <div class="diagram-caption">
+                        Figure 2: Action Abstraction used for Decoupled Training. 
+                    </div>
+                </div>
                 <p>
                     The issue is that current HRL algorithms learn abstractions that fail in one of two ways.
                 </p>
                 <p>
-                    Some discard distinctions between options that are needed for optimal control.
-                    This limits the quality of the recoverable policy and undermines hierarchy altogether. 
+                    Some discard distinctions between options that are needed for optimal control. For example, HIQL 
+                    learns the action abstraction through its single action-free state-value function, but 
+                    value equivalence does not imply action equivalence. This limits the quality of the 
+                    recoverable policy and undermines hierarchy altogether. 
                 </p>
+                <div class="diagram-container">
+                    <img src="prior_works.png" alt="Prior Works" class="diagram">
+                    <div class="diagram-caption">
+                        Figure 3: QSO compared to Prior Methods for learning the Action Abstraction. 
+                    </div>
+                </div>
                 <p>
-                    Others retain distinctions between options that are irrelevant for control. 
-                    This preserves horizon reduction but forfeits coarser state abstraction, 
-                    as functionally equivalent behaviours remain distinct outputs of the 
-                    high-level policy and distinct inputs to the low-level one.
+                    Others retain distinctions between options that are irrelevant for control. For example, SHARSA and DSHARSA 
+                    use Absolute Subgoal Options (i.e. they bypass learning an action abstraction by simply 
+                    specifying the entire state that the low-level policy should reach). Similarly, OPAL uses a surrogate 
+                    objective to learn an option space using a $\beta$-VAE trained to reconstruct the entire action sequence,
+                    meaning that the option encodes how a segment was executed, instead of its outcome. Both of these 
+                    ''action abstractions'' preserve horizon reduction but forfeit coarser state abstraction, as 
+                    functionally equivalent behaviours remain distinct outputs of the high-level policy and distinct inputs to the low-level one.
                 </p>
             </div>
         </section>
 
         <section class="section">
-            <h2>Action Abstraction Desiderata</h2>
+            <h2>Action Abstraction Desiderata and Q-Shaped Options</h2>
             <div class="item-block">
                 <p>
-                    We introduce three desiderata for an action abstraction to enable horizon reduction and data aggregation.
+                    We characterise three desiderata for an action abstraction to enable both horizon reduction and data aggregation. 
+                    We also introduce QSO, to address all three. QSO builds on an architecture with separate state-value functions, 
+                    Q functions and policies at each level of the hierarchy.
                 </p>
                 <div class="math-box">
                     <strong>Desideratum 1. Represent outcome rather than execution.</strong>
+                    <p>
+                        To prevent potentially suboptimal dataset execution from becoming a part of the option's representation, 
+                        we want the option to represent the outcome of a trajectory segment rather than the exact state-action 
+                        sequence that produced it. 
+                    </p>
                 </div>
                 <p>
-                    To prevent potentially suboptimal dataset execution from becoming a part of the option's representation, 
-                    we want the option to represent the outcome of a trajectory segment rather than the exact state-action 
-                    sequence that produced it. 
+                    To address our first desideratum, we encode only the current and target states $(s_t, s_{t+k})$ to represent 
+                    the outcome of a $k$-step trajectory segment $\tau_{t:t+k}$ rather than the exact state-action sequence that produced it. 
                 </p>
                 <div class="math-box">
                     <strong>Desideratum 2. Preserve distinctions between options necessary for optimal control.</strong>
+                    <p>
+                        We want two target states that require different actions from the same current state map to different options, 
+                        so that a policy conditioning on the representation instead of the target state can still be optimal for both.
+                    </p>
                 </div>
                 <p>
-                    We want two target states that require different actions from the same current state map to different options, 
-                    so that a policy conditioning on the representation instead of the target state can still be optimal for both.
-                </p>
-                <div class="math-box">
-                    <strong>Desideratum 3. Discard unnecessary distinctions between options.</strong>
-                </div>
-                <p>
-                    We want trajectory segments with similar outcomes to map to the same option, so that experience 
-                    can be aggregated across the state space. 
-                </p>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>Q-Shaped Options</h2>
-            <div class="item-block">
-                <p>
-                    QSO builds on an architecture with separate state-value functions, Q functions and policies 
-                    at each level of the hierarchy. It learns the action abstraction between consecutive levels 
-                    as an encoder shared between the two levels and shaped by their respective Q functions. 
-                </p>
-                <p>
-                    To address our first desideratum, we encode only the current and target states to represent 
-                    the outcome of a trajectory segment rather than the exact state-action sequence that produced it. 
-                </p>
-                <p>
-                    To address our second desideratum, we shape the abstraction via the low-level Q function. Intuitively, 
-                    if two admissible target states require different actions from the same current state, 
-                    the low-level Q function must represent different sets of action values. Minimising the Bellman error 
+                    To address our second desideratum, we shape the abstraction jointly with the low-level Q function: 
+                    $Q_l(s_t, \phi_\omega(s, s_{t+k}), a_t)$. Intuitively, if two admissible target states 
+                    require different actions from the same current state, the low-level Q function must 
+                    represent different sets of action values. Minimising the Bellman error 
                     therefore pressures the action abstraction to map the current and target state pairs to different points 
                     in the option space. In our paper, we introduce a formal definition of a control-sufficient action abstraction
                     and prove that low-level Q shaping satisfies control-sufficiency (note that this is actually stronger than control sufficiency). 
                 </p>
+                <div class="math-box">
+                    <strong>Desideratum 3. Discard unnecessary distinctions between options.</strong>
+                    <p>
+                        We want trajectory segments with similar outcomes to map to the same option, so that experience 
+                        can be aggregated across the state space. 
+                    </p>
+                </div>
                 <p>
-                    To address our third desideratum, we additionally shape the option space through the high-level Q function.
+                    To address our third desideratum, we additionally shape the option space jointly with the high-level Q function:
+                    $Q_h(s_t, g, \phi_\omega(s_t, s_{t+k}))$.
                     Functionally equivalent state-target pairs induce similar high-level action values, 
                     so distinguishing between them provides little predictive benefit to $Q_h$. Note that, 
                     unlike control sufficiency, this invariance is not explicitly enforced by the objective, 
@@ -434,6 +454,254 @@
                     and gradient-based optimisation. 
                     Empirically, we find that this is sufficient to form coherent clusters in the option space. 
                 </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Experiments</h2>
+            <div class="item-block">
+                <p>
+                    We first evaluate QSO’s downstream performance when learning from a fixed offline dataset. 
+                </p>
+                <p>
+                    To assess our second and third desiderata, we introduce ASO, which shares QSO’s policy 
+                    extraction but, like SHARSA and DSHARSA, uses absolute subgoal options instead of a 
+                    learned action abstraction. This isolates the effect of QSO’s action abstraction: 
+                    discarding distinctions necessary for control should yield a worse policy than ASO, 
+                    whereas discarding only unnecessary ones should improve performance through greater 
+                    data aggregation.
+                </p>
+                <div class="table-wrapper">
+                    <div class="table-caption">
+                        <strong>Table 2: Summary of results on selected OGBench environments using the default datasets.</strong> Success rate (%) averaged over 5 evaluation tasks after 1M training steps. Mean and 95% bootstrap confidence interval over 4 seeds.
+                    </div>
+                    <table class="results-table qso-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th class="group" colspan="2">Non-Hierarchical</th>
+                                <th class="group" colspan="6">Hierarchical</th>
+                                <th class="ratio" rowspan="2"><span class="qso-head">QSO</span> /<br>Best Mean</th>
+                            </tr>
+                            <tr>
+                                <th>Environment</th>
+                                <th>IQL</th>
+                                <th>QC</th>
+                                <th>HIQL</th>
+                                <th>OPAL</th>
+                                <th>SHARSA</th>
+                                <th>DSHARSA</th>
+                                <th>ASO</th>
+                                <th class="qso-head">QSO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>antmaze-giant-stitch-v0</td>
+                                <td>0 <small>[0, 0]</small></td>
+                                <td>0 <small>[0, 0]</small></td>
+                                <td>54 <small>[48, 60]</small></td>
+                                <td>53 <small>[52, 55]</small></td>
+                                <td>68 <small>[61, 76]</small></td>
+                                <td><span class="best">72</span> <small>[67, 77]</small></td>
+                                <td>68 <small>[66, 70]</small></td>
+                                <td>68 <small>[66, 70]</small></td>
+                                <td>94%</td>
+                            </tr>
+                            <tr>
+                                <td>antmaze-teleport-stitch-v0</td>
+                                <td>47 <small>[44, 51]</small></td>
+                                <td>37 <small>[32, 40]</small></td>
+                                <td>36 <small>[34, 39]</small></td>
+                                <td><span class="best">69</span> <small>[64, 74]</small></td>
+                                <td>53 <small>[52, 55]</small></td>
+                                <td>58 <small>[55, 62]</small></td>
+                                <td>66 <small>[62, 69]</small></td>
+                                <td>54 <small>[52, 57]</small></td>
+                                <td>79%</td>
+                            </tr>
+                            <tr>
+                                <td>humanoidmaze-giant-stitch-v0</td>
+                                <td>1 <small>[1, 1]</small></td>
+                                <td>0 <small>[0, 0]</small></td>
+                                <td>6 <small>[4, 8]</small></td>
+                                <td>82 <small>[78, 85]</small></td>
+                                <td>30 <small>[27, 33]</small></td>
+                                <td>30 <small>[27, 32]</small></td>
+                                <td>44 <small>[38, 48]</small></td>
+                                <td><span class="best">90</span> <small>[88, 92]</small></td>
+                                <td>100%</td>
+                            </tr>
+                            <tr class="section-divider">
+                                <td>cube-double-play-v0</td>
+                                <td>20 <small>[17, 23]</small></td>
+                                <td>72 <small>[70, 74]</small></td>
+                                <td>7 <small>[5, 9]</small></td>
+                                <td>29 <small>[26, 33]</small></td>
+                                <td>72 <small>[68, 77]</small></td>
+                                <td><span class="best">80</span> <small>[75, 84]</small></td>
+                                <td>68 <small>[65, 70]</small></td>
+                                <td>70 <small>[65, 74]</small></td>
+                                <td>87%</td>
+                            </tr>
+                            <tr>
+                                <td>cube-triple-play-v0</td>
+                                <td>6 <small>[6, 7]</small></td>
+                                <td><span class="best">23</span> <small>[19, 27]</small></td>
+                                <td>16 <small>[14, 18]</small></td>
+                                <td>3 <small>[2, 4]</small></td>
+                                <td>14 <small>[10, 18]</small></td>
+                                <td>14 <small>[13, 16]</small></td>
+                                <td>4 <small>[4, 4]</small></td>
+                                <td>22 <small>[20, 23]</small></td>
+                                <td>92%</td>
+                            </tr>
+                            <tr>
+                                <td>cube-quadruple-play-v0</td>
+                                <td>0 <small>[0, 0]</small></td>
+                                <td>2 <small>[1, 2]</small></td>
+                                <td>3 <small>[1, 5]</small></td>
+                                <td>0 <small>[0, 0]</small></td>
+                                <td>0 <small>[0, 1]</small></td>
+                                <td>0 <small>[0, 1]</small></td>
+                                <td>0 <small>[0, 0]</small></td>
+                                <td><span class="best">4</span> <small>[4, 5]</small></td>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <td>scene-play-v0</td>
+                                <td>48 <small>[45, 51]</small></td>
+                                <td>82 <small>[81, 83]</small></td>
+                                <td>41 <small>[35, 46]</small></td>
+                                <td>84 <small>[78, 87]</small></td>
+                                <td>92 <small>[90, 93]</small></td>
+                                <td>89 <small>[87, 91]</small></td>
+                                <td><span class="best">94</span> <small>[91, 95]</small></td>
+                                <td>85 <small>[82, 90]</small></td>
+                                <td>91%</td>
+                            </tr>
+                            <tr>
+                                <td>puzzle-3x3-play-v0</td>
+                                <td><span class="best">100</span> <small>[99, 100]</small></td>
+                                <td>81 <small>[46, 99]</small></td>
+                                <td>48 <small>[46, 49]</small></td>
+                                <td>70 <small>[65, 74]</small></td>
+                                <td>78 <small>[71, 87]</small></td>
+                                <td>85 <small>[81, 90]</small></td>
+                                <td>76 <small>[72, 80]</small></td>
+                                <td>72 <small>[69, 75]</small></td>
+                                <td>72%</td>
+                            </tr>
+                            <tr>
+                                <td>puzzle-4x4-play-v0</td>
+                                <td>71 <small>[61, 78]</small></td>
+                                <td>25 <small>[23, 27]</small></td>
+                                <td>0 <small>[0, 1]</small></td>
+                                <td>64 <small>[61, 68]</small></td>
+                                <td>74 <small>[67, 79]</small></td>
+                                <td>72 <small>[69, 75]</small></td>
+                                <td>69 <small>[65, 75]</small></td>
+                                <td><span class="best">92</span> <small>[81, 100]</small></td>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <td>puzzle-4x5-play-v0</td>
+                                <td>14 <small>[11, 15]</small></td>
+                                <td>16 <small>[13, 19]</small></td>
+                                <td>4 <small>[3, 5]</small></td>
+                                <td><span class="best">24</span> <small>[22, 25]</small></td>
+                                <td>17 <small>[15, 20]</small></td>
+                                <td>18 <small>[18, 19]</small></td>
+                                <td>14 <small>[11, 18]</small></td>
+                                <td>15 <small>[11, 20]</small></td>
+                                <td>65%</td>
+                            </tr>
+                            <tr>
+                                <td>puzzle-4x6-play-v0</td>
+                                <td>8 <small>[5, 10]</small></td>
+                                <td>16 <small>[14, 19]</small></td>
+                                <td>5 <small>[4, 6]</small></td>
+                                <td>17 <small>[15, 18]</small></td>
+                                <td>14 <small>[10, 16]</small></td>
+                                <td>16 <small>[14, 17]</small></td>
+                                <td>11 <small>[8, 15]</small></td>
+                                <td><span class="best">18</span> <small>[15, 22]</small></td>
+                                <td>100%</td>
+                            </tr>
+                            <tr class="section-divider avg">
+                                <td>Average over 11 Environments</td>
+                                <td>29 <small>[27, 30]</small></td>
+                                <td>32 <small>[29, 34]</small></td>
+                                <td>20 <small>[20, 20]</small></td>
+                                <td>45 <small>[44, 46]</small></td>
+                                <td>46 <small>[44, 49]</small></td>
+                                <td>49 <small>[48, 49]</small></td>
+                                <td>47 <small>[46, 48]</small></td>
+                                <td><span class="best">54</span> <small>[51, 56]</small></td>
+                                <td>100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>
+                    Table 1 shows that QSO achieves the highest average success rate across the 11 
+                    environments, 54\% against 49\% for the next best method (DSHARSA). Particularly 
+                    notable is its performance in humanoidmaze, which has the largest action space 
+                    dimension (21, against at most 8 in the other environments) where it achieves 
+                    90\% against 82\% for the next best method and three times that of DSHARSA. 
+                    In puzzle-4x4 it achieves 92\% against at most 74\% for any baseline. 
+                    In cube-quadruple, the hardest manipulation environment, QSO is the only method 
+                    with non-zero success on two of the five tasks. 
+                    QSO performs consistently across environments, achieving at least 65\% of the best 
+                    success rate in all environments, while every other algorithm drops below 35\% of 
+                    the best in at least one.
+                </p>
+                <p>
+                    <strong>Is the action abstraction semantically meaningful?</strong>
+                </p>
+                <p>
+                    We test whether QSO maps functionally equivalent behaviours to similar 
+                    parts of the option space by identifying groups of semantically similar behaviours. 
+                    For each behaviour, we randomly sample trajectory sequences from the validation 
+                    dataset and compare PCA projections and whitened distances of their encodings. 
+                    An invariant encoder should produce a clear block-diagonal similarity structure. 
+                    As depicted in Figures 4 and 5, QSO exhibits this structure across both the 
+                    locomotion and manipulation environments, whereas HIQL also assigns high 
+                    similarity between behaviour groups, and OPAL and absolute subgoal options 
+                    produce low similarity within behaviour groups. 
+                </p>
+                <div class="diagram-container">
+                    <img src="ant_option_embeddings.png" alt="Ant Embeddings" class="diagram">
+                    <div class="diagram-caption">
+                        Figure 4: Antmaze-Giant Option Embeddings. 
+                    </div>
+                </div>
+                <div class="diagram-container">
+                    <img src="cube_double_embeddings.png" alt="Cube Embeddings" class="diagram">
+                    <div class="diagram-caption">
+                        Figure 5: Cube-Double Option Embeddings. 
+                    </div>
+                </div>
+                <p>
+                    <strong>How necessary is joint option shaping by both the high and low-level Q functions?</strong>
+                </p>
+                <p>
+                    Joint shaping is important for both the learned action abstraction and downstream performance. 
+                    As shown in Figures 6 and 7, neither Q function alone recovers the clean semantic structure 
+                    obtained when both are used. We refer to our paper for the downstream RL performances. 
+                </p>
+                <div class="diagram-container">
+                    <img src="ant_critic_option_embeddings.png" alt="Ant Critic Ablation Embeddings" class="diagram">
+                    <div class="diagram-caption">
+                        Figure 6: Antmaze-Giant Q-Shaping Ablation Option Embeddings. 
+                    </div>
+                </div>
+                <div class="diagram-container">
+                    <img src="cube_critic_option_embeddings.png" alt="Cube Critic Ablation Embeddings" class="diagram">
+                    <div class="diagram-caption">
+                        Figure 7: Cube-Double Q-Shaping Ablation Option Embeddings. 
+                    </div>
+                </div>
             </div>
         </section>
 
