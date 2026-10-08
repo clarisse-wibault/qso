@@ -268,6 +268,8 @@
         .results-table.qso-table, .results-table.qso-table th, .results-table.qso-table td {
             font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Courier New", monospace;
         }
+        .results-table.qso-table { font-size: 0.7em; }
+        .results-table.qso-table th, .results-table.qso-table td { white-space: nowrap; padding: 4px 6px; }
         .results-table.qso-table td:nth-child(n+4):nth-child(-n+8),
         .results-table.qso-table thead tr:nth-child(2) th:nth-child(n+4):nth-child(-n+8) { background: #F2F2F2; }
         .results-table.qso-table td:nth-child(9),
@@ -325,9 +327,9 @@
                     to an individual joint.
                 </p>
                 <div class="diagram-container">
-                    <img src="hrl.png" alt="HRL" class="diagram">
+                    <img src="hrl.png" alt="HRL" class="diagram" style="width: 50%; display: block; margin: 0 auto;">>
                     <div class="diagram-caption">
-                        Figure 1: Goal-Conditioned two-tiered Hierarchical Reinforcement Learning. 
+                        Figure 1: Goal-conditioned two-tiered Hierarchical Reinforcement Learning. 
                     </div>
                 </div>
                 <p>
@@ -369,9 +371,9 @@
                     high-level policy and goals for the low-level policy during training. 
                 </p>
                 <div class="diagram-container">
-                    <img src="decoupled_training.png" alt="Decoupled Training" class="diagram">
+                    <img src="decoupled_training.png" alt="Decoupled Training" class="diagram" style="width: 50%; display: block; margin: 0 auto;">>
                     <div class="diagram-caption">
-                        Figure 2: Action Abstraction used for Decoupled Training. 
+                        Figure 2: Action abstraction used for decoupled training. 
                     </div>
                 </div>
                 <p>
@@ -410,7 +412,7 @@
                     Q functions and policies at each level of the hierarchy.
                 </p>
                 <div class="math-box">
-                    <strong>Desideratum 1. Represent outcome rather than execution.</strong>
+                    <p><strong>Desideratum 1. Represent outcome rather than execution.</strong></p>
                     <p>
                         To prevent potentially suboptimal dataset execution from becoming a part of the option's representation, 
                         we want the option to represent the outcome of a trajectory segment rather than the exact state-action 
@@ -422,7 +424,7 @@
                     the outcome of a $k$-step trajectory segment $\tau_{t:t+k}$ rather than the exact state-action sequence that produced it. 
                 </p>
                 <div class="math-box">
-                    <strong>Desideratum 2. Preserve distinctions between options necessary for optimal control.</strong>
+                    <p><strong>Desideratum 2. Preserve distinctions between options necessary for optimal control.</strong></p>
                     <p>
                         We want two target states that require different actions from the same current state map to different options, 
                         so that a policy conditioning on the representation instead of the target state can still be optimal for both.
@@ -438,7 +440,7 @@
                     and prove that low-level Q shaping satisfies control-sufficiency (note that this is actually stronger than control sufficiency). 
                 </p>
                 <div class="math-box">
-                    <strong>Desideratum 3. Discard unnecessary distinctions between options.</strong>
+                    <p><strong>Desideratum 3. Discard unnecessary distinctions between options.</strong></p>
                     <p>
                         We want trajectory segments with similar outcomes to map to the same option, so that experience 
                         can be aggregated across the state space. 
@@ -673,13 +675,13 @@
                 <div class="diagram-container">
                     <img src="ant_option_embeddings.png" alt="Ant Embeddings" class="diagram">
                     <div class="diagram-caption">
-                        Figure 4: Antmaze-Giant Option Embeddings. 
+                        Figure 4: Antmaze-giant option embedding PCAs and whitened similarity matrices. 
                     </div>
                 </div>
                 <div class="diagram-container">
-                    <img src="cube_double_embeddings.png" alt="Cube Embeddings" class="diagram">
+                    <img src="cube_double_option_embeddings.png" alt="Cube Embeddings" class="diagram">
                     <div class="diagram-caption">
-                        Figure 5: Cube-Double Option Embeddings. 
+                        Figure 5: Cube-double option embedding PCAs and whitened similarity matrices. 
                     </div>
                 </div>
                 <p>
@@ -691,31 +693,18 @@
                     obtained when both are used. We refer to our paper for the downstream RL performances. 
                 </p>
                 <div class="diagram-container">
-                    <img src="ant_critic_option_embeddings.png" alt="Ant Critic Ablation Embeddings" class="diagram">
+                    <img src="ant_critic_option_embeddings.png" alt="Ant Critic Ablation Embeddings" class="diagram" style="width: 75%; display: block; margin: 0 auto;">
                     <div class="diagram-caption">
-                        Figure 6: Antmaze-Giant Q-Shaping Ablation Option Embeddings. 
+                        Figure 6: Antmaze-giant Q shaping ablation option embedding PCAs and whitened similarity matrices.
                     </div>
                 </div>
                 <div class="diagram-container">
                     <img src="cube_critic_option_embeddings.png" alt="Cube Critic Ablation Embeddings" class="diagram">
                     <div class="diagram-caption">
-                        Figure 7: Cube-Double Q-Shaping Ablation Option Embeddings. 
+                        Figure 7: Cube-double Q shaping ablation option embedding PCAs and whitened similarity matrices. 
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="section">
-            <h2>Acknowledgements</h2>
-            <div class="item-block">
-                <p>
-                </p>
-            </div>
-            <footer>
-                <a href="https://github.com/jonbarron/jonbarron.github.io" target="_blank"
-                    rel="noopener noreferrer">Page
-                    Template</a>
-            </footer>
         </section>
     </main>
 </body>
