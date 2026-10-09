@@ -373,7 +373,7 @@
                 <div class="diagram-container">
                     <img src="decoupled_training.png" alt="Decoupled Training" class="diagram" style="width: 37%; display: block; margin: 0 auto;">
                     <div class="diagram-caption">
-                        Figure 2: Action abstraction used for decoupled training. 
+                        Figure 2: Action abstraction $\omega_t = \phi_\omega(\tau_{t:t+k})$ used for decoupled training. 
                     </div>
                 </div>
                 <p>
@@ -432,7 +432,7 @@
                 </div>
                 <p>
                     To address our second desideratum, we shape the abstraction jointly with the low-level Q function: 
-                    $Q_l(s_t, \phi_\omega(s, s_{t+k}), a_t)$. Intuitively, if two admissible target states 
+                    $Q_l(s_t, \phi_\omega(s_t, s_{t+k}), a_t)$. Intuitively, if two admissible target states 
                     require different actions from the same current state, the low-level Q function must 
                     represent different sets of action values. Minimising the Bellman error 
                     therefore pressures the action abstraction to map the current and target state pairs to different points 
@@ -665,9 +665,10 @@
                     We test whether QSO maps functionally equivalent behaviours to similar 
                     parts of the option space by identifying groups of semantically similar behaviours. 
                     For each behaviour, we randomly sample trajectory sequences from the validation 
-                    dataset and compare PCA projections and whitened distances of their encodings. 
-                    An invariant encoder should produce a clear block-diagonal similarity structure. 
-                    As depicted in Figures 4 and 5, QSO exhibits this structure across both the 
+                    dataset and compare PCA projections and whitened distances of their action 
+                    abstraction encodings. An invariant encoder should produce a clear 
+                    block-diagonal similarity structure. As depicted in Figures 4 and 5, 
+                    QSO exhibits this structure across both the 
                     locomotion and manipulation environments, whereas HIQL also assigns high 
                     similarity between behaviour groups, and OPAL and absolute subgoal options 
                     produce low similarity within behaviour groups. 
@@ -708,18 +709,32 @@
         </section>
 
         <section class="section">
-            <h2>What's Next?</h2>
+            <h2>What are the limitations?</h2>
             <div class="item-block">
                 <p>
-                    Firstly, extending to the online setting, i.e. using the hierarchical policy to do more targeted exploration for ''maximally useful'' data collection. 
+                    Q-Shaping has two main limitations. Firstly, our current method only tackles goal-conditioned tasks with sparse, binary rewards, 
+                    where the outcome of a trajectory segment is simply the state it reaches. Defining an outcome is much less obvious for other types of data, 
+                    such as text or images. In other words, how can we map semantically equivalent paragraphs or images to one goal?
                 </p>
                 <p>
-                    Secondly, addressing stochastic environments, i.e. using progress-adaptive high-level control to reduce the optimistic bias that 
-                    arises when the high-level critic evaluates an option conditioned on its realised outcome, 
-                    a limitation shared by all hindsight-based hierarchical methods, including HIQL, OPAL, SHARSA and DSHARSA.
+                    Secondly, in stochastic environments, QSO, like all hindsight-based hierarchical methods (including HIQL, OPAL, SHARSA and DSHARSA), 
+                    is optimistically biased, as it evaluates an option conditioned on the outcome that was actually realised. 
+                    We need to prevent the high-level policy from repeatedly proposing options 
+                    that the low-level policy is unlikely to achieve because of the stochastic nature of the environment. 
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>What's next?</h2>
+            <div class="item-block">
+                <p>
+                    Our current agenda is as follows. Firstly, extending QSO to the online setting, i.e. using the hierarchical policy for more targeted exploration and 
+                    ''maximally useful'' data collection.
                 </p>
                 <p>
-                    Finally, adapting QSO to language, i.e. using goal-conditioned Q-shaping to learn latent abstractions from text.
+                    Secondly, addressing the two limitations above. Both are open research questions with several possible approaches, for example 
+                    progress-adaptive high-level control to reduce the optimistic bias.
                 </p>
             </div>
         </section>
