@@ -283,7 +283,7 @@
             font-size: 11px;
         }
         .results-table.properties-table {
-            font-size: 13px;
+            font-size: 11px;
         }
     </style>
 </head>
@@ -329,7 +329,7 @@
                     policy outputs a high-level action or option conditioned on the current state and goal; 
                     a low-level policy then conditions on this option as well as the current state to output 
                     a primitive action. In maze navigation, for example, the option might be to reach 
-                    ''a point two metres down'', while the primitive action could be applying torques 
+                    "a point two metres down", while the primitive action could be applying torques 
                     to an individual joint.
                 </p>
                 <div class="diagram-container">
@@ -356,7 +356,7 @@
                     For example, the high-level can aggregate all examples at a certain coordinate 
                     irrespective of pose, which is too fine-grained for high-level control, while the 
                     low-level can aggregate all examples with a certain pose irrespective of 
-                    coordinates, since reaching ''a point two metres down'' requires the same actions 
+                    coordinates, since reaching "a point two metres down" requires the same actions 
                     wherever the agent is.
                 </p>
             </div>
@@ -470,7 +470,7 @@
                     specifying the entire state that the low-level policy should reach). Similarly, OPAL uses a surrogate 
                     objective to learn an option space using a $\beta$-VAE trained to reconstruct the entire action sequence,
                     meaning that the option encodes how a segment was executed, instead of its outcome. Both of these 
-                    ''action abstractions'' preserve horizon reduction but forfeit coarser state abstraction, as 
+                    "action abstractions" preserve horizon reduction but forfeit coarser state abstraction, as 
                     functionally equivalent behaviours remain distinct outputs of the high-level policy and distinct inputs to the low-level one.
                 </p>
             </div>
@@ -803,7 +803,7 @@
             <div class="item-block">
                 <p>
                     Our current agenda is as follows. Firstly, extending QSO to the online setting, i.e. using the hierarchical policy for more targeted exploration and 
-                    ''maximally useful'' data collection.
+                    "maximally useful" data collection.
                 </p>
                 <p>
                     Secondly, addressing the two limitations above. Both are open research questions with several possible approaches, for example 
