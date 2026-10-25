@@ -370,6 +370,73 @@
                     abstraction maps these segments to the option space, serving as actions for the 
                     high-level policy and goals for the low-level policy during training. 
                 </p>
+                <div class="table-wrapper">
+                    <div class="table-caption">
+                        <strong>Table 1: Properties of the action abstraction φ<sub>ω</sub>.</strong>
+                        What the abstraction <strong>encodes</strong>;
+                        the <strong>method</strong> used to learn the abstraction;
+                        whether the objective encourages preserving distinctions
+                        <strong>necessary for optimal control</strong> and whether
+                        the abstraction empirically exhibits
+                        <strong>discarding unnecessary distinctions</strong>.
+                    </div>
+                
+                    <table class="results-table qso-table">
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Encodes</th>
+                                <th>Method</th>
+                                <th>Preserves</th>
+                                <th>Discards</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>HIQL</td>
+                                <td>s<sub>t</sub>, s<sub>t+k</sub></td>
+                                <td>V</td>
+                                <td>No</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>OPAL</td>
+                                <td>τ<sub>t:t+k</sub></td>
+                                <td>β-VAE (Surrogate Objective)</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>SHARSA</td>
+                                <td>s<sub>t+k</sub></td>
+                                <td>–</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>DSHARSA</td>
+                                <td>s<sub>t+k</sub></td>
+                                <td>–</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                            </tr>
+                            <tr class="section-divider">
+                                <td>ASO</td>
+                                <td>s<sub>t+k</sub></td>
+                                <td>–</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td class="qso-head">QSO (ours)</td>
+                                <td>s<sub>t</sub>, s<sub>t+k</sub></td>
+                                <td>Q<sub>h</sub> and Q<sub>l</sub></td>
+                                <td><span class="best">Yes</span></td>
+                                <td><span class="best">Yes</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="diagram-container">
                     <img src="decoupled_training.png" alt="Decoupled Training" class="diagram" style="width: 37%; display: block; margin: 0 auto;">
                     <div class="diagram-caption">
@@ -646,7 +713,7 @@
                     </table>
                 </div>
                 <p>
-                    Table 1 shows that QSO achieves the highest average success rate across the 11 
+                    Table 2 shows that QSO achieves the highest average success rate across the 11 
                     environments, 54% against 49% for the next best method (DSHARSA). Particularly 
                     notable is its performance in humanoidmaze, which has the largest action space 
                     dimension (21, against at most 8 in the other environments) where it achieves 
